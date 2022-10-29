@@ -9,35 +9,35 @@ cd -- ${PWD}
 createUserNamePassword(){
 
     # 判断用户名
-    if [[ -z "$LINUX_USERNAME" ]]; then
-      echo "Please set 'LINUX_USERNAME' for linux"
+    if [[ -z "$USER_NAME" ]]; then
+      echo "Please set 'USER_NAME' for linux"
       exit 2
     fi
 
-    sudo useradd -m $LINUX_USERNAME
-    sudo adduser $LINUX_USERNAME sudo
+    sudo useradd -m $USER_NAME
+    sudo adduser $USER_NAME sudo
 
 
     # 判断用户密码环境变量
-    if [[ -z "$LINUX_USER_PASSWORD" ]]; then
-      echo "Please set 'LINUX_USER_PASSWORD' for linux"
+    if [[ -z "$USER_PW" ]]; then
+      echo "Please set 'USER_PW' for linux"
       exit 3
     fi
 
-    echo "$LINUX_USERNAME:$LINUX_USER_PASSWORD" | sudo chpasswd
+    echo "$USER_NAME:$USER_PW" | sudo chpasswd
     sudo sed -i 's/\/bin\/sh/\/bin\/bash/g' /etc/passwd
-    echo "### Update user: $USER password ###"
-    echo -e "$LINUX_USER_PASSWORD\n$LINUX_USER_PASSWORD" | sudo passwd "$USER"
+    echo "Update linux user password !"
+    echo -e "$USER_PW\n$USER_PW" | sudo passwd "$USER_NAME"
 
     # 判断用户hostname
-    if [[ -z "$LINUX_MACHINE_NAME" ]]; then
-      echo "Please set 'LINUX_MACHINE_NAME' for linux"
+    if [[ -z "$HOST_NAME" ]]; then
+      echo "Please set 'HOST_NAME' for linux"
       exit 4
     fi
 
-    sudo hostname $LINUX_MACHINE_NAME
+    sudo hostname $HOST_NAME
     
-    unset LINUX_USERNAME LINUX_USER_PASSWORD LINUX_MACHINE_NAME
+    unset USER_NAME USER_PW HOST_NAME
 }
 
 # 获取配置启动Ngrok
