@@ -5,6 +5,12 @@ PWD=`pwd`
 
 cd -- ${PWD}
 
+V_PORT=1234
+V_UUID=`uuid`
+V_ALTERID=0
+V_NETWORK="tcp"
+V_EMAIL="smallflowercat1995@hotmail.com"
+
 # 创建用户添加密码
 createUserNamePassword(){
 
@@ -64,7 +70,7 @@ getStartNgrok(){
     rm -fv ${FILE_NAME}
 
     # 配置文件生成
-    echo -e "tunnels:\n    ssh:\n        proto: tcp\n        addr: 22\n    trojan:\n        proto: tcp\n        addr: 1234\n    v2ray:\n        proto: tcp\n        addr: 12345\nversion: '2'\n" > ngrok.yml
+    echo -e "tunnels:\n    ssh:\n        proto: tcp\n        addr: 22\n    v2ray:\n        proto: tcp\n        addr: ${V_PORT}\nversion: '2'\n" > ngrok.yml
 
     # 启动 ngrok
     ./ngrok start --all --authtoken "$NGROK_AUTH_TOKEN" --config ngrok.yml --log ngrok.log &
@@ -117,21 +123,21 @@ getStartV2ray(){
       },
       "inbounds": [
         {
-          "port": 1234,
+          "port": ${V_PORT},
           "protocol": "vmess",
           "settings": {
             "udp": false,
             "clients": [
               {
-                "id": "ba0ee1fc-6fe1-4a52-980a-26a3ad651630",
-                "alterId": 0,
-                "email": "t@t.tt"
+                "id": "${V_UUID}",
+                "alterId": ${V_ALTERID},
+                "email": "${V_EMAIL}"
               }
             ],
             "allowTransparent": false
           },
           "streamSettings": {
-            "network": "tcp"
+            "network": "${V_NETWORK}"
           }
         }
       ],
