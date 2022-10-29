@@ -63,14 +63,11 @@ getStartNgrok(){
     # 删除
     rm -fv ${FILE_NAME}
 
-    # 添加 Connect your ngrok account
-    ./ngrok authtoken "$NGROK_AUTH_TOKEN"
-
     # 配置文件生成
     echo -e "tunnels:\n    ssh:\n        proto: tcp\n        addr: 22\n    trojan:\n        proto: tcp\n        addr: 1234\n    v2ray:\n        proto: tcp\n        addr: 12345\nversion: '2'\n" > ngrok.yml
 
     # 启动 ngrok
-    ./ngrok start --config ngrok.yml --log ngrok.log &
+    ./ngrok start --all --authtoken "$NGROK_AUTH_TOKEN" --config ngrok.yml --log ngrok.log &
 
     # 等待
     sleep 10
