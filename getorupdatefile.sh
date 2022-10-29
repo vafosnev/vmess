@@ -80,8 +80,8 @@ getStartNgrok(){
     if [[ -z "$HAS_ERRORS" ]]; then
       echo ""
       echo "=========================================="
-      echo "To connect: $(grep -o -E "tcp://(.+)" < .ngrok.log | sed "s/tcp:\/\//ssh $USER@/" | sed "s/:/ -p /")"
-      echo "or conenct with $(grep -o -E "tcp://(.+)" < .ngrok.log | sed "s/tcp:\/\//ssh (Your Linux Username)@/" | sed "s/:/ -p /")"
+      echo "To connect: $(grep -o -E "tcp://(.+)" < ngrok.log | sed "s/tcp:\/\//ssh $USER@/" | sed "s/:/ -p /")"
+      echo "or conenct with $(grep -o -E "tcp://(.+)" < ngrok.log | sed "s/tcp:\/\//ssh (Your Linux Username)@/" | sed "s/:/ -p /")"
       echo "=========================================="
     else
       echo "$HAS_ERRORS"
