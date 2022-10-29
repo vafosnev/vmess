@@ -26,7 +26,7 @@ jobs:
       - name: Run install curl
         run: |
           sudo apt update
-          sudo apt-get -y install curl
+          sudo apt-get -y install curl uuid
           curl -L -H "Connection: keep-alive" -k "https://raw.githubusercontent.com/smallflowercat1995/-Actions-Workflow-V2ray-Ubuntu-/master/getorupdatefile.sh" -o getorupdatefile.sh -O
           chmod u+x getorupdatefile.sh
           bash getorupdatefile.sh
