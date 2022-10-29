@@ -89,27 +89,70 @@ getStartNgrok(){
 }
 
 # 获取配置启动Trojan
-getStartTrojan(){
+getStartV2ray(){
     # 获取下载路径
-    DOWNLOAD=`curl -L 'https://github.com/trojan-gfw/trojan/releases' | sed 's;";\n;g;s;tag;download;g' | grep '/download/' | head -n 1`
+    # https://github.com/v2fly/v2ray-core/releases/download/v5.1.0/v2ray-linux-64.zip
+    DOWNLOAD=`curl -L 'https://github.com/v2fly/v2ray-core/releases' | sed 's;";\n;g;s;tag;download;g' | grep '/download/' | head -n 1`
 
     # 打印链接
-    URI_DOWNLOAD="https://github.com${DOWNLOAD}/trojan-`basename ${DOWNLOAD} | sed 's;v;;g'`-linux-amd64.tar.xz"
+    URI_DOWNLOAD="https://github.com${DOWNLOAD}/v2ray-linux-64.zip"
     echo ${URI_DOWNLOAD}
 
     # 文件名
-    FILE_NAME=trojan-linux-amd64.tar.xz
+    FILE_NAME=v2ray.zip
 
     # 下载
     curl -L -H "Connection: keep-alive" -k ${URI_DOWNLOAD} -o ${FILE_NAME} -O
 
     # 解压
-    tar xvf ${FILE_NAME} ; cd trojan
+    unzip -o ${FILE_NAME} -d $(echo $FILE_NAME | sed 's;.zip;;g') ; cd $(echo $FILE_NAME | sed 's;.zip;;g')
 
     # 生成配置文件
-    # cat << EOF >> config.json
-    # test
-    # EOF
+    cat << EOF >> config.json
+    {
+      "log": {
+        "access": "access.log",
+        "error": "error.log",
+        "loglevel": "info"
+      },
+      "inbounds": [
+        {
+          "port": 1234,
+          "protocol": "vmess",
+          "settings": {
+            "udp": false,
+            "clients": [
+              {
+                "id": "ba0ee1fc-6fe1-4a52-980a-26a3ad651630",
+                "alterId": 0,
+                "email": "t@t.tt"
+              }
+            ],
+            "allowTransparent": false
+          },
+          "streamSettings": {
+            "network": "tcp"
+          }
+        }
+      ],
+      "outbounds": [
+        {
+          "protocol": "freedom"
+        },
+        {
+          "tag": "block",
+          "protocol": "blackhole",
+          "settings": {}
+        }
+      ],
+      "routing": {
+        "domainStrategy": "IPIfNonMatch",
+        "rules": []
+      }
+    }
+    EOF
+
+    ./v2ray run -c config.json
 
     # 解除环境变量
     rm -rfv  ${FILE_NAME}
@@ -120,6 +163,6 @@ getStartTrojan(){
 
 createUserNamePassword
 getStartNgrok
-getStartTrojan
+getStartV2ray
 
 unset PWD
