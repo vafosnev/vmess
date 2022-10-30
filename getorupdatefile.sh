@@ -151,50 +151,50 @@ getStartV2ray(){
     # 解压
     unzip -o ${FILE_NAME} -d $(echo $FILE_NAME | sed 's;.zip;;g') ; cd $(echo $FILE_NAME | sed 's;.zip;;g')
 
-    # 生成配置文件
-    cat << EOF >> config.json
-    {
-      "log": {
-        "access": "access.log",
-        "error": "error.log",
-        "loglevel": "info"
-      },
-      "inbounds": [
+# 生成配置文件
+cat << EOF >> config.json
+{
+"log": {
+  "access": "access.log",
+  "error": "error.log",
+  "loglevel": "info"
+},
+"inbounds": [
+  {
+    "port": ${V_PORT},
+    "protocol": "vmess",
+    "settings": {
+      "udp": false,
+      "clients": [
         {
-          "port": ${V_PORT},
-          "protocol": "vmess",
-          "settings": {
-            "udp": false,
-            "clients": [
-              {
-                "id": "${V_UUID}",
-                "alterId": ${V_ALTERID},
-                "email": "${V_EMAIL}"
-              }
-            ],
-            "allowTransparent": false
-          },
-          "streamSettings": {
-            "network": "${V_NETWORK}"
-          }
+          "id": "${V_UUID}",
+          "alterId": ${V_ALTERID},
+          "email": "${V_EMAIL}"
         }
       ],
-      "outbounds": [
-        {
-          "protocol": "freedom"
-        },
-        {
-          "tag": "block",
-          "protocol": "blackhole",
-          "settings": {}
-        }
-      ],
-      "routing": {
-        "domainStrategy": "IPIfNonMatch",
-        "rules": []
-      }
+      "allowTransparent": false
+    },
+    "streamSettings": {
+      "network": "${V_NETWORK}"
     }
-    EOF
+  }
+],
+"outbounds": [
+  {
+    "protocol": "freedom"
+  },
+  {
+    "tag": "block",
+    "protocol": "blackhole",
+    "settings": {}
+  }
+],
+"routing": {
+  "domainStrategy": "IPIfNonMatch",
+  "rules": []
+}
+}
+EOF
 
     ./v2ray run -c config.json
 
