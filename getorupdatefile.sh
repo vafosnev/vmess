@@ -127,8 +127,8 @@ getStartNgrok(){
     N_PORT=`grep -o -E "name=(.+)" < ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`
 
     V_S='{"v":"2","ps":"'${REPORT_DATE}'创建，'${F_DATE}'之前停止可能提前停止","add":"'${N_ADDR}'","port":"'${N_PORT}'","id":"'${V_UUID}'","aid":"'${V_ALTERID}'","scy":"'${V_SCY}'","net":"'${V_NETWORK}'","type":"none","host":"","path":"","tls":"","sni":"","alpn":""}' 
-    echo V_S
-    echo V_S | base64 -w 0 | xargs echo vmess:// | sed 's; ;;g'
+    echo ${V_S}
+    echo ${V_S} | base64 -w 0 | xargs echo vmess:// | sed 's; ;;g'
     # 解除环境变量
     unset  HAS_ERRORS NGROK_AUTH_TOKEN URI_DOWNLOAD FILE_NAME
 }
