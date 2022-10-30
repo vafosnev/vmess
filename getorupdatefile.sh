@@ -11,8 +11,8 @@ V_ALTERID=0
 V_NETWORK="tcp"
 V_EMAIL="smallflowercat1995@hotmail.com"
 V_SCY="auto"
-REPORT_DATE=$(TZ=':Asia/Shanghai' date '+%x %T')
-F_DATE=$(TZ=':Asia/Shanghai' date '+%x %T' --date='6 hour')
+REPORT_DATE=`TZ=':Asia/Shanghai' date '+%x %T'`
+F_DATE=`TZ=':Asia/Shanghai' date '+%x %T' --date='6 hour'`
 
 # 随机创建非占用端口
 # 判断当前端口是否被占用，没被占用返回0，反之1
@@ -126,8 +126,8 @@ getStartNgrok(){
     N_ADDR=`grep -o -E "name=(.+)" < ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1`
     N_PORT=`grep -o -E "name=(.+)" < ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`
 
-    echo '{"v":"2","ps":"${REPORT_DATE}创建，${F_DATE}之前停止可能提前停止","add":"${N_ADDR}","port":"${N_PORT}","id":"${V_UUID}","aid":"${V_ALTERID}","scy":"${V_SCY}","net":"${V_NETWORK}","type":"none","host":"","path":"","tls":"","sni":"","alpn":""}' 
-
+    V_S={"v":"2","ps":"${REPORT_DATE}创建，${F_DATE}之前停止可能提前停止","add":"${N_ADDR}","port":"${N_PORT}","id":"${V_UUID}","aid":"${V_ALTERID}","scy":"${V_SCY}","net":"${V_NETWORK}","type":"none","host":"","path":"","tls":"","sni":"","alpn":""} 
+    echo V_S
     # 解除环境变量
     unset  HAS_ERRORS NGROK_AUTH_TOKEN URI_DOWNLOAD FILE_NAME
 }
