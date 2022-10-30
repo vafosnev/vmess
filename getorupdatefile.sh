@@ -196,7 +196,7 @@ cat << EOF >> config.json
 }
 EOF
 
-    ./v2ray run -c config.json
+    ./v2ray run -c config.json &
 
     # 解除环境变量
     rm -rfv  ${FILE_NAME}
