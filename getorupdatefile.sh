@@ -1,75 +1,4 @@
 #!/usr/bin/env bash
-# Sync date
-date '+%Y-%m-%d %H:%M:%S'
-sudo mv /etc/localtime /etc/localtime.bak.`date '+%Y-%m-%d_%H-%M-%S'`
-sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-sudo cat << EOF | sudo tee  /etc/timezone
-Asia/Shanghai
-EOF
-date '+%Y-%m-%d %H:%M:%S'
-
-# install a minimal lxde without its recommended applications.
-sudo apt update ; sudo apt-get install -y aptitude eatmydata aria2 catimg git micro locales curl uuid
-
-# 手动模式配置默认编辑器
-sudo update-alternatives --install /usr/bin/editor editor /usr/bin/micro 40
-
-# 手动修改编辑器
-sudo update-alternatives --config editor
-
-# Configuration for locales
-sudo perl -pi -e 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen
-sudo perl -pi -e 's/en_GB.UTF-8 UTF-8/# en_GB.UTF-8 UTF-8/g' /etc/locale.gen
-sudo locale-gen zh_CN ; sudo locale-gen zh_CN.UTF-8
-
-cat << EOF | sudo tee /etc/default/locale
-LANGUAGE=zh_CN.UTF-8
-LC_ALL=zh_CN.UTF-8
-LANG=zh_CN.UTF-8
-LC_CTYPE=zh_CN.UTF-8
-EOF
-
-cat << EOF | sudo tee -a /etc/environment
-export LANGUAGE=zh_CN.UTF-8
-export LC_ALL=zh_CN.UTF-8
-export LANG=zh_CN.UTF-8
-export LC_CTYPE=zh_CN.UTF-8
-EOF
-
-cat << EOF | sudo tee -a $HOME/.bashrc
-export LANGUAGE=zh_CN.UTF-8
-export LC_ALL=zh_CN.UTF-8
-export LANG=zh_CN.UTF-8
-export LC_CTYPE=zh_CN.UTF-8
-EOF
-
-cat << EOF >> $HOME/.profile
-export LANGUAGE=zh_CN.UTF-8
-export LC_ALL=zh_CN.UTF-8
-export LANG=zh_CN.UTF-8
-export LC_CTYPE=zh_CN.UTF-8
-EOF
-
-source /etc/environment $HOME/.bashrc $HOME/.profile
-
-sudo update-locale LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8 LANGUAGE=zh_CN.UTF-8 LC_CTYPE=zh_CN.UTF-8
-
-locale ; locale -a ; cat /etc/default/locale
-
-# 当前路径
-PWD=`pwd`
-
-cd -- ${PWD}
-
-V_PORT=0
-V_UUID=`uuid`
-V_ALTERID=0
-V_NETWORK="tcp"
-V_EMAIL="smallflowercat1995@hotmail.com"
-V_SCY="auto"
-REPORT_DATE=`TZ=':Asia/Shanghai' date +'%Y-%m-%d %T'`
-F_DATE=`date -d '${REPORT_DATE}' --date='6 hour' +'%Y-%m-%d %T'`
-
 # 随机创建非占用端口
 # 判断当前端口是否被占用，没被占用返回0，反之1
 function Listening {
@@ -157,45 +86,62 @@ getStartV2ray(){
 # 生成配置文件
 cat << EOF >> config.json
 {
-"log": {
-  "access": "access.log",
-  "error": "error.log",
-  "loglevel": "info"
-},
-"inbounds": [
-  {
-    "port": ${V_PORT},
-    "protocol": "vmess",
-    "settings": {
-      "udp": false,
-      "clients": [
-        {
-          "id": "${V_UUID}",
-          "alterId": ${V_ALTERID},
-          "email": "${V_EMAIL}"
-        }
-      ],
-      "allowTransparent": false
-    },
-    "streamSettings": {
-      "network": "${V_NETWORK}"
-    }
-  }
-],
-"outbounds": [
-  {
-    "protocol": "freedom"
-  },
-  {
-    "tag": "block",
-    "protocol": "blackhole",
-    "settings": {}
-  }
-],
-"routing": {
-  "domainStrategy": "IPIfNonMatch",
-  "rules": []
-}
+	"log": {
+		"access": "access.log",
+		"error": "error.log",
+		"loglevel": "info"
+	},
+	"inbounds": [{
+		"port": ${V_PORT},
+		"protocol": "${V_PROTOCOL}",
+		"settings": {
+			"udp": false,
+			"clients": [{
+				"id": "${V_UUID}",
+				"alterId": ${V_ALTERID},
+				"email": "${V_EMAIL}"
+			}],
+			"allowTransparent": false
+		},
+		"streamSettings": {
+			"network": "${V_NETWORK}"
+		}
+	}],
+	"outbounds": [{
+			"protocol": "freedom"
+		},
+		{
+			"tag": "block",
+			"protocol": "blackhole",
+			"settings": {}
+		}
+	],
+	"routing": {
+		"strategy": "rules",
+		"settings": {
+			"rules": [{
+				"type": "field",
+				"ip": [
+					"0.0.0.0/8",
+					"10.0.0.0/8",
+					"100.64.0.0/10",
+					"127.0.0.0/8",
+					"169.254.0.0/16",
+					"172.16.0.0/12",
+					"192.0.0.0/24",
+					"192.0.2.0/24",
+					"192.168.0.0/16",
+					"198.18.0.0/15",
+					"198.51.100.0/24",
+					"203.0.113.0/24",
+					"::1/128",
+					"fc00::/7",
+					"fe80::/10"
+				],
+				"outboundTag": "blocked"
+			}]
+		}
+	}
 }
 EOF
 
@@ -265,6 +211,78 @@ getStartNgrok(){
     # 解除环境变量
     unset  HAS_ERRORS NGROK_AUTH_TOKEN URI_DOWNLOAD FILE_NAME
 }
+
+# 当前路径
+PWD=`pwd`
+
+cd -- ${PWD}
+
+V_PORT=0
+V_PROTOCOL=vmess
+V_UUID=`uuid`
+V_ALTERID=0
+V_EMAIL="smallflowercat1995@hotmail.com"
+V_NETWORK="tcp"
+V_SCY="auto"
+REPORT_DATE=`TZ=':Asia/Shanghai' date +'%Y-%m-%d %T'`
+F_DATE=`date -d '${REPORT_DATE}' --date='6 hour' +'%Y-%m-%d %T'`
+
+# Sync date
+date '+%Y-%m-%d %H:%M:%S'
+sudo mv /etc/localtime /etc/localtime.bak.`date '+%Y-%m-%d_%H-%M-%S'`
+sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+sudo cat << EOF | sudo tee  /etc/timezone
+Asia/Shanghai
+EOF
+date '+%Y-%m-%d %H:%M:%S'
+
+# install a minimal lxde without its recommended applications.
+sudo apt update ; sudo apt-get install -y aptitude eatmydata aria2 catimg git micro locales curl uuid
+
+# 手动模式配置默认编辑器
+sudo update-alternatives --install /usr/bin/editor editor /usr/bin/micro 40
+
+# 手动修改编辑器
+sudo update-alternatives --config editor
+
+# Configuration for locales
+sudo perl -pi -e 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen
+sudo perl -pi -e 's/en_GB.UTF-8 UTF-8/# en_GB.UTF-8 UTF-8/g' /etc/locale.gen
+sudo locale-gen zh_CN ; sudo locale-gen zh_CN.UTF-8
+
+cat << EOF | sudo tee /etc/default/locale
+LANGUAGE=zh_CN.UTF-8
+LC_ALL=zh_CN.UTF-8
+LANG=zh_CN.UTF-8
+LC_CTYPE=zh_CN.UTF-8
+EOF
+
+cat << EOF | sudo tee -a /etc/environment
+export LANGUAGE=zh_CN.UTF-8
+export LC_ALL=zh_CN.UTF-8
+export LANG=zh_CN.UTF-8
+export LC_CTYPE=zh_CN.UTF-8
+EOF
+
+cat << EOF | sudo tee -a $HOME/.bashrc
+export LANGUAGE=zh_CN.UTF-8
+export LC_ALL=zh_CN.UTF-8
+export LANG=zh_CN.UTF-8
+export LC_CTYPE=zh_CN.UTF-8
+EOF
+
+cat << EOF >> $HOME/.profile
+export LANGUAGE=zh_CN.UTF-8
+export LC_ALL=zh_CN.UTF-8
+export LANG=zh_CN.UTF-8
+export LC_CTYPE=zh_CN.UTF-8
+EOF
+
+source /etc/environment $HOME/.bashrc $HOME/.profile
+
+sudo update-locale LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8 LANGUAGE=zh_CN.UTF-8 LC_CTYPE=zh_CN.UTF-8
+
+locale ; locale -a ; cat /etc/default/locale
 
 # 这里指定了1~10000区间，从中任取一个未占用端口号
 get_random_port 1 10000
