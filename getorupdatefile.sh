@@ -225,7 +225,7 @@ getStartNgrok(){
       touch ../result.txt ; ls ../result.txt
       
       echo -e "$(grep -o -E "name=(.+)" < ../ngrok.log | sed 's; ;\n;g' | grep -v addr)" > ../result.txt
-      echo -e "To connect: \nssh -o ServerAliveInterval=60 `grep -o -E "name=(.+)" < ../ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1` -p `grep -o -E "name=(.+)" < ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`" >> ../result.txt
+      echo -e "To connect: \nssh -o ServerAliveInterval=60 [USER_NAME]@`grep -o -E "name=(.+)" < ../ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1` -p `grep -o -E "name=(.+)" < ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`" >> ../result.txt
       
       N_ADDR=`grep -o -E "name=(.+)" < ../ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1`
       N_PORT=`grep -o -E "name=(.+)" < ../ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`
