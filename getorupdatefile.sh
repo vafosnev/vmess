@@ -218,8 +218,9 @@ EOF
 # 这里指定了1~10000区间，从中任取一个未占用端口号
 get_random_port 1 10000
 createUserNamePassword
-getStartNgrok
 getStartV2ray
+getStartNgrok
+
 
 
 
