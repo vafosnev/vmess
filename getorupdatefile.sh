@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# install a minimal lxde without its recommended applications.
+sudo apt update ; sudo apt-get install -y aptitude eatmydata aria2 catimg git micro locales curl uuid
 
 # Sync date
 date '+%Y-%m-%d %H:%M:%S'
@@ -9,17 +11,10 @@ Asia/Shanghai
 EOF
 date '+%Y-%m-%d %H:%M:%S'
 
-# install a minimal lxde without its recommended applications.
-sudo apt update ; sudo apt-get install -y aptitude eatmydata aria2 catimg git micro locales curl uuid
-
-# 手动模式配置默认编辑器
-sudo update-alternatives --install /usr/bin/editor editor /usr/bin/micro 40
-
-# 手动修改编辑器
-sudo update-alternatives --config editor
-
 # 当前路径
 PWD=`pwd`
+
+echo ${PWD}
 
 # 环境变量
 V_PORT=0
@@ -256,6 +251,12 @@ get_random_port 1 10000
 createUserNamePassword
 getStartV2ray
 getStartNgrok
+
+# 手动模式配置默认编辑器
+sudo update-alternatives --install /usr/bin/editor editor /usr/bin/micro 40
+
+# 手动修改编辑器
+sudo update-alternatives --config editor
 
 # Configuration for locales
 sudo perl -pi -e 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen
