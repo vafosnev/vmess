@@ -15,9 +15,9 @@
 10. 转到 Actions -> -Actions-Workflow-V2ray-Ubuntu- 并且启动 workflow，实现自动化  
 11. 新修改目录结构  
 
-    .
-    ├── getorupdatefile.sh                          # 搭建脚本  
-    └── README.md                                   # 这个是说明文件   
+        .
+        ├── getorupdatefile.sh                          # 搭建脚本  
+        └── README.md                                   # 这个是说明文件   
     
 9. 出于安全考虑还是使用邮箱把发送内容发给自己的邮箱  
 10. 这次能维持6h挺好  
