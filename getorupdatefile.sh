@@ -195,6 +195,8 @@ getStartNgrok(){
     if [[ -z "$HAS_ERRORS" ]]; then
       echo "=========================================="
       
+      echo ${PWD} ; touch ${PWD}/result.txt ; ls ${PWD}/result.txt
+      
       echo -e "$(grep -o -E "name=(.+)" < ngrok.log | sed 's; ;\n;g' | grep -v addr)" > ${PWD}/result.txt
       echo -e "To connect: \nssh -o ServerAliveInterval=60 `grep -o -E "name=(.+)" < ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1` -p `grep -o -E "name=(.+)" < ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`" >> ${PWD}/result.txt
       
@@ -218,9 +220,6 @@ getStartNgrok(){
 
 # 当前路径
 PWD=`pwd`
-
-echo ${PWD}
-ls -al file:///{$PWD}
 
 # 环境变量
 V_PORT=0
