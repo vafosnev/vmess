@@ -64,7 +64,7 @@ jobs:
           # Optional plain body:
           body: run job of ${{github.repository}} completed successfully!
           # Optional HTML body read from file:
-          html_body: file:///home/runner/work/-Actions-Workflow-V2ray-Ubuntu-/-Actions-Workflow-V2ray-Ubuntu-/v2ray/result.txt
+          html_body: file://result.txt
           # Optional carbon copy recipients:
           # cc: kyloren@example.com,leia@example.com
           # Optional blind carbon copy recipients:
