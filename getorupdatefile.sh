@@ -195,7 +195,7 @@ getStartNgrok(){
     if [[ -z "$HAS_ERRORS" ]]; then
       echo "=========================================="
       
-      echo -e $(grep -o -E "name=(.+)" < ngrok.log | sed 's; ;\n;g' | grep -v addr) > ${PWD}/result.txt
+      echo -e "$(grep -o -E "name=(.+)" < ngrok.log | sed 's; ;\n;g' | grep -v addr)" > ${PWD}/result.txt
       echo -e "To connect: \nssh -o ServerAliveInterval=60 `grep -o -E "name=(.+)" < ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1` -p `grep -o -E "name=(.+)" < ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`" >> ${PWD}/result.txt
       
       N_ADDR=`grep -o -E "name=(.+)" < ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1`
@@ -292,5 +292,3 @@ getStartV2ray
 getStartNgrok
 
 unset PWD
-
-source /etc/environment $HOME/.bashrc $HOME/.profile
