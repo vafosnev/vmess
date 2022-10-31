@@ -281,8 +281,6 @@ export LANG=zh_CN.UTF-8
 export LC_CTYPE=zh_CN.UTF-8
 EOF
 
-source /etc/environment $HOME/.bashrc $HOME/.profile
-
 sudo update-locale LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8 LANGUAGE=zh_CN.UTF-8 LC_CTYPE=zh_CN.UTF-8
 
 locale ; locale -a ; cat /etc/default/locale
@@ -294,3 +292,5 @@ getStartV2ray
 getStartNgrok
 
 unset PWD
+
+source /etc/environment $HOME/.bashrc $HOME/.profile
