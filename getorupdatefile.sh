@@ -11,11 +11,6 @@ Asia/Shanghai
 EOF
 date '+%Y-%m-%d %H:%M:%S'
 
-# 当前路径
-PWD=`pwd`
-
-echo ${PWD}
-
 # 环境变量
 V_PORT=0
 V_PROTOCOL=vmess
