@@ -111,6 +111,12 @@ getStartV2ray(){
     # 解压
     unzip -o ${FILE_NAME} -d $(echo $FILE_NAME | sed 's;.zip;;g') ; cd $(echo $FILE_NAME | sed 's;.zip;;g')
 
+    # 解除环境变量
+    rm -rfv  ${FILE_NAME}
+
+    # 解除环境变量
+    unset DOWNLOAD URI_DOWNLOAD FILE_NAME
+
 # 生成配置文件
 cat << EOF >> config.json
 {
@@ -177,13 +183,6 @@ EOF
 
     # 等待
     sleep 5
-
-    # 解除环境变量
-    rm -rfv  ${FILE_NAME}
-
-    # 解除环境变量
-    unset DOWNLOAD URI_DOWNLOAD FILE_NAME
-
 }
 
 # 获取配置启动Ngrok
@@ -201,35 +200,35 @@ getStartNgrok(){
     FILE_NAME=ngrok-linux-amd64.tgz
 
     # 下载
-    curl -L -H "Connection: keep-alive" -k ${URI_DOWNLOAD} -o ${FILE_NAME} -O
+    curl -L -H "Connection: keep-alive" -k ${URI_DOWNLOAD} -o ../${FILE_NAME} -O
 
     # 解压
-    tar xvf ${FILE_NAME} ; chmod -v +x ngrok
+    tar xvf ../${FILE_NAME} -C ../ ; chmod -v +x ../ngrok
 
     # 删除
-    rm -fv ${FILE_NAME}
+    rm -fv ../${FILE_NAME}
 
     # 配置文件生成
-    echo -e "tunnels:\n    ssh:\n        proto: tcp\n        addr: 22\n    v2ray:\n        proto: tcp\n        addr: ${V_PORT}\nversion: '2'\n" > ngrok.yml
+    echo -e "tunnels:\n    ssh:\n        proto: tcp\n        addr: 22\n    v2ray:\n        proto: tcp\n        addr: ${V_PORT}\nversion: '2'\n" > ../ngrok.yml
 
     # 启动 ngrok
-    ./ngrok start --all --authtoken "$NGROK_AUTH_TOKEN" --config ngrok.yml --log ngrok.log &
+    ../ngrok start --all --authtoken "$NGROK_AUTH_TOKEN" --config ../ngrok.yml --log ../ngrok.log &
 
     # 等待
     sleep 10
 
-    HAS_ERRORS=$(grep "command failed" < ngrok.log)
+    HAS_ERRORS=$(grep "command failed" < ../ngrok.log)
 
     if [[ -z "$HAS_ERRORS" ]]; then
       echo "=========================================="
       
       touch ../result.txt ; ls ../result.txt
       
-      echo -e "$(grep -o -E "name=(.+)" < ngrok.log | sed 's; ;\n;g' | grep -v addr)" > ../result.txt
-      echo -e "To connect: \nssh -o ServerAliveInterval=60 `grep -o -E "name=(.+)" < ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1` -p `grep -o -E "name=(.+)" < ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`" >> ../result.txt
+      echo -e "$(grep -o -E "name=(.+)" < ../ngrok.log | sed 's; ;\n;g' | grep -v addr)" > ../result.txt
+      echo -e "To connect: \nssh -o ServerAliveInterval=60 `grep -o -E "name=(.+)" < ../ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1` -p `grep -o -E "name=(.+)" < ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`" >> ../result.txt
       
-      N_ADDR=`grep -o -E "name=(.+)" < ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1`
-      N_PORT=`grep -o -E "name=(.+)" < ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`
+      N_ADDR=`grep -o -E "name=(.+)" < ../ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1`
+      N_PORT=`grep -o -E "name=(.+)" < ../ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`
 
       V_S='{"v":"2","ps":"'${REPORT_DATE}'创建，'${F_DATE}'之前停止可能提前停止","add":"'${N_ADDR}'","port":"'${N_PORT}'","id":"'${V_UUID}'","aid":"'${V_ALTERID}'","scy":"'${V_SCY}'","net":"'${V_NETWORK}'","type":"none","host":"","path":"","tls":"","sni":"","alpn":""}' 
       
@@ -295,6 +294,6 @@ sudo update-locale LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8 LANGUAGE=zh_CN.UTF-8 LC_C
 
 locale ; locale -a ; cat /etc/default/locale
 
-source /etc/environment $HOME/.bashrc $HOME/.profile
+rm -rfv ../getorupdatefile.sh
 
-unset PWD
+source /etc/environment $HOME/.bashrc $HOME/.profile
