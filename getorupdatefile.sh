@@ -224,15 +224,15 @@ getStartNgrok(){
       
       touch ../result.txt ; ls ../result.txt
       
-      echo -e "$(grep -o -E "name=(.+)" < ../ngrok.log | sed 's; ;\n;g' | grep -v addr)" > ../result.txt
-      echo -e "To connect: \nssh -o ServerAliveInterval=60 [USER_NAME]@`grep -o -E "name=(.+)" < ../ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1` -p `grep -o -E "name=(.+)" < ../ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`" >> ../result.txt
+      echo -e "$(grep -o -E "name=(.+)" < ../ngrok.log | sed 's; ;\n;g' | grep -v addr)\n" > ../result.txt
+      echo -e "To connect: \nssh -o ServerAliveInterval=60 [USER_NAME]@`grep -o -E "name=(.+)" < ../ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1` -p `grep -o -E "name=(.+)" < ../ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`\n" >> ../result.txt
       
       N_ADDR=`grep -o -E "name=(.+)" < ../ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1`
       N_PORT=`grep -o -E "name=(.+)" < ../ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`
 
       V_S='{"v":"2","ps":"'${REPORT_DATE}'创建，'${F_DATE}'之前停止可能提前停止","add":"'${N_ADDR}'","port":"'${N_PORT}'","id":"'${V_UUID}'","aid":"'${V_ALTERID}'","scy":"'${V_SCY}'","net":"'${V_NETWORK}'","type":"none","host":"","path":"","tls":"","sni":"","alpn":""}' 
       
-      echo ${V_S} >> ../result.txt
+      echo -e ${V_S}"\n" >> ../result.txt
       echo ${V_S} | base64 -w 0 | xargs echo vmess:// | sed 's; ;;g' >> ../result.txt
       
       echo "=========================================="
