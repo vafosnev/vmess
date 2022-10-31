@@ -147,11 +147,17 @@ EOF
 
     ./v2ray run -c config.json &
 
+    # 等待
+    sleep 5
+
     # 解除环境变量
     rm -rfv  ${FILE_NAME}
 
     # 解除环境变量
     unset DOWNLOAD URI_DOWNLOAD FILE_NAME
+   
+    # 回归初始目录
+    cd -- ${PWD}
 }
 
 # 获取配置启动Ngrok
@@ -215,8 +221,7 @@ getStartNgrok(){
 # 当前路径
 PWD=`pwd`
 
-cd -- ${PWD}
-
+# 环境变量
 V_PORT=0
 V_PROTOCOL=vmess
 V_UUID=`uuid`
