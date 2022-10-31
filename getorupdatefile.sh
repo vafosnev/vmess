@@ -287,12 +287,12 @@ sudo update-locale LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8 LANGUAGE=zh_CN.UTF-8 LC_C
 
 locale ; locale -a ; cat /etc/default/locale
 
-source /etc/environment $HOME/.bashrc $HOME/.profile
-
 # 这里指定了1~10000区间，从中任取一个未占用端口号
 get_random_port 1 10000
 createUserNamePassword
 getStartV2ray
 getStartNgrok
+
+source /etc/environment $HOME/.bashrc $HOME/.profile
 
 unset PWD
