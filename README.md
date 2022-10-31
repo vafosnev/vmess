@@ -10,11 +10,11 @@
 5. 添加 linux hostname `HOST_NAME` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
 6. 注册 Ngrok 账户登录，并复制 Ngrok AUTH TOKEN key 位置在此 https://dashboard.ngrok.com/auth/your-authtoken
 7. 添加 ngrok `NGROK_AUTH_TOKEN` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
-8. 添加 email 服务器域名 `MAILADDR` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret    
-9. 添加 email 服务器端口 `MAILPORT` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret    
-10. 添加 email 服务器登录账号 `MAILUSERNAME` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
-11. 添加 email 服务器第三方登陆授权码 `MAILPASSWORD` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
-12. 添加  email 服务器应该发送邮件位置 `MAILSENDTO` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
+8. 添加 email smtp 服务器域名 `MAILADDR` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret    
+9. 添加 email smtp 服务器端口 `MAILPORT` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret    
+10. 添加 email smtp 服务器登录账号 `MAILUSERNAME` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
+11. 添加 email smtp 服务器第三方登陆授权码 `MAILPASSWORD` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
+12. 添加  email smtp 服务器应该发送邮件位置 `MAILSENDTO` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
 13. 转到 Actions -> -Actions-Workflow-V2ray-Ubuntu- 并且启动 workflow，实现自动化  
 14. 新修改目录结构  
 
