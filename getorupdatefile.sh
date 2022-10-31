@@ -219,6 +219,9 @@ getStartNgrok(){
 # 当前路径
 PWD=`pwd`
 
+echo ${PWD}
+ls -al file:///{$PWD}
+
 # 环境变量
 V_PORT=0
 V_PROTOCOL=vmess
@@ -284,6 +287,8 @@ EOF
 sudo update-locale LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8 LANGUAGE=zh_CN.UTF-8 LC_CTYPE=zh_CN.UTF-8
 
 locale ; locale -a ; cat /etc/default/locale
+
+source /etc/environment $HOME/.bashrc $HOME/.profile
 
 # 这里指定了1~10000区间，从中任取一个未占用端口号
 get_random_port 1 10000
