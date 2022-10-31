@@ -121,8 +121,8 @@ getStartV2ray(){
 cat << EOF >> config.json
 {
 	"log": {
-		"access": "access.log",
-		"error": "error.log",
+		"access": "/var/log/v2ray/access.log",
+		"error": "/var/log/v2ray/error.log",
 		"loglevel": "info"
 	},
 	"inbounds": [{
