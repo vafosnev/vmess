@@ -9,8 +9,15 @@
 4. 添加 `USER_PW` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
 5. 添加 `HOST_NAME` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
 6. 添加 `NGROK_AUTH_TOKEN` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
-7. 转到 Actions -> -Actions-Workflow-V2ray-Ubuntu- 并且启动 workflow，实现自动化  
-8. 新修改目录结构  
+7. 添加 `MAILUSERNAME` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
+8. 添加 `MAILPASSWORD` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
+9. 添加 `MAILSENDTO` 在 GitHub 仓库页 -> Settings -> Secrets -> actions -> New repository secret  
+10. 转到 Actions -> -Actions-Workflow-V2ray-Ubuntu- 并且启动 workflow，实现自动化  
+11. 新修改目录结构  
+
     .
     ├── getorupdatefile.sh                          # 搭建脚本  
     └── README.md                                   # 这个是说明文件   
+    
+9. 出于安全考虑还是使用邮箱把发送内容发给自己的邮箱  
+10. 这次能维持6h挺好  
