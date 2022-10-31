@@ -32,12 +32,6 @@ V_SCY="auto"
 REPORT_DATE=`TZ=':Asia/Shanghai' date +'%Y-%m-%d %T'`
 F_DATE=`date -d '${REPORT_DATE}' --date='6 hour' +'%Y-%m-%d %T'`
 
-# 这里指定了1~10000区间，从中任取一个未占用端口号
-get_random_port 1 10000
-createUserNamePassword
-getStartV2ray
-getStartNgrok
-
 # 随机创建非占用端口
 # 判断当前端口是否被占用，没被占用返回0，反之1
 function Listening {
@@ -256,6 +250,12 @@ getStartNgrok(){
     # 解除环境变量
     unset  HAS_ERRORS NGROK_AUTH_TOKEN URI_DOWNLOAD FILE_NAME
 }
+
+# 这里指定了1~10000区间，从中任取一个未占用端口号
+get_random_port 1 10000
+createUserNamePassword
+getStartV2ray
+getStartNgrok
 
 # Configuration for locales
 sudo perl -pi -e 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen
