@@ -1,4 +1,43 @@
 #!/usr/bin/env bash
+
+# Sync date
+date '+%Y-%m-%d %H:%M:%S'
+sudo mv /etc/localtime /etc/localtime.bak.`date '+%Y-%m-%d_%H-%M-%S'`
+sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+sudo cat << EOF | sudo tee  /etc/timezone
+Asia/Shanghai
+EOF
+date '+%Y-%m-%d %H:%M:%S'
+
+# install a minimal lxde without its recommended applications.
+sudo apt update ; sudo apt-get install -y aptitude eatmydata aria2 catimg git micro locales curl uuid
+
+# 手动模式配置默认编辑器
+sudo update-alternatives --install /usr/bin/editor editor /usr/bin/micro 40
+
+# 手动修改编辑器
+sudo update-alternatives --config editor
+
+# 当前路径
+PWD=`pwd`
+
+# 环境变量
+V_PORT=0
+V_PROTOCOL=vmess
+V_UUID=`uuid`
+V_ALTERID=0
+V_EMAIL="smallflowercat1995@hotmail.com"
+V_NETWORK="tcp"
+V_SCY="auto"
+REPORT_DATE=`TZ=':Asia/Shanghai' date +'%Y-%m-%d %T'`
+F_DATE=`date -d '${REPORT_DATE}' --date='6 hour' +'%Y-%m-%d %T'`
+
+# 这里指定了1~10000区间，从中任取一个未占用端口号
+get_random_port 1 10000
+createUserNamePassword
+getStartV2ray
+getStartNgrok
+
 # 随机创建非占用端口
 # 判断当前端口是否被占用，没被占用返回0，反之1
 function Listening {
@@ -195,18 +234,18 @@ getStartNgrok(){
     if [[ -z "$HAS_ERRORS" ]]; then
       echo "=========================================="
       
-      echo ${PWD} ; touch ${PWD}/result.txt ; ls ${PWD}/result.txt
+      touch ../result.txt ; ls ../result.txt
       
-      echo -e "$(grep -o -E "name=(.+)" < ngrok.log | sed 's; ;\n;g' | grep -v addr)" > ${PWD}/result.txt
-      echo -e "To connect: \nssh -o ServerAliveInterval=60 `grep -o -E "name=(.+)" < ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1` -p `grep -o -E "name=(.+)" < ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`" >> ${PWD}/result.txt
+      echo -e "$(grep -o -E "name=(.+)" < ngrok.log | sed 's; ;\n;g' | grep -v addr)" > ../result.txt
+      echo -e "To connect: \nssh -o ServerAliveInterval=60 `grep -o -E "name=(.+)" < ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1` -p `grep -o -E "name=(.+)" < ngrok.log | grep ssh | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`" >> ../result.txt
       
       N_ADDR=`grep -o -E "name=(.+)" < ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1`
       N_PORT=`grep -o -E "name=(.+)" < ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`
 
       V_S='{"v":"2","ps":"'${REPORT_DATE}'创建，'${F_DATE}'之前停止可能提前停止","add":"'${N_ADDR}'","port":"'${N_PORT}'","id":"'${V_UUID}'","aid":"'${V_ALTERID}'","scy":"'${V_SCY}'","net":"'${V_NETWORK}'","type":"none","host":"","path":"","tls":"","sni":"","alpn":""}' 
       
-      echo ${V_S} >> ${PWD}/result.txt
-      echo ${V_S} | base64 -w 0 | xargs echo vmess:// | sed 's; ;;g' >> ${PWD}/result.txt
+      echo ${V_S} >> ../result.txt
+      echo ${V_S} | base64 -w 0 | xargs echo vmess:// | sed 's; ;;g' >> ../result.txt
       
       echo "=========================================="
     else
@@ -217,38 +256,6 @@ getStartNgrok(){
     # 解除环境变量
     unset  HAS_ERRORS NGROK_AUTH_TOKEN URI_DOWNLOAD FILE_NAME
 }
-
-# 当前路径
-PWD=`pwd`
-
-# 环境变量
-V_PORT=0
-V_PROTOCOL=vmess
-V_UUID=`uuid`
-V_ALTERID=0
-V_EMAIL="smallflowercat1995@hotmail.com"
-V_NETWORK="tcp"
-V_SCY="auto"
-REPORT_DATE=`TZ=':Asia/Shanghai' date +'%Y-%m-%d %T'`
-F_DATE=`date -d '${REPORT_DATE}' --date='6 hour' +'%Y-%m-%d %T'`
-
-# Sync date
-date '+%Y-%m-%d %H:%M:%S'
-sudo mv /etc/localtime /etc/localtime.bak.`date '+%Y-%m-%d_%H-%M-%S'`
-sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-sudo cat << EOF | sudo tee  /etc/timezone
-Asia/Shanghai
-EOF
-date '+%Y-%m-%d %H:%M:%S'
-
-# install a minimal lxde without its recommended applications.
-sudo apt update ; sudo apt-get install -y aptitude eatmydata aria2 catimg git micro locales curl uuid
-
-# 手动模式配置默认编辑器
-sudo update-alternatives --install /usr/bin/editor editor /usr/bin/micro 40
-
-# 手动修改编辑器
-sudo update-alternatives --config editor
 
 # Configuration for locales
 sudo perl -pi -e 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen
@@ -286,12 +293,6 @@ EOF
 sudo update-locale LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8 LANGUAGE=zh_CN.UTF-8 LC_CTYPE=zh_CN.UTF-8
 
 locale ; locale -a ; cat /etc/default/locale
-
-# 这里指定了1~10000区间，从中任取一个未占用端口号
-get_random_port 1 10000
-createUserNamePassword
-getStartV2ray
-getStartNgrok
 
 source /etc/environment $HOME/.bashrc $HOME/.profile
 
