@@ -1,5 +1,9 @@
 
 #!/usr/bin/env bash
+
+sudo apt update
+sudo apt-get -y install curl uuid
+
 # 当前路径
 PWD=`pwd`
 
