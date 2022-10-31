@@ -155,9 +155,7 @@ EOF
 
     # 解除环境变量
     unset DOWNLOAD URI_DOWNLOAD FILE_NAME
-   
-    # 回归初始目录
-    cd ${PWD}
+
 }
 
 # 获取配置启动Ngrok
