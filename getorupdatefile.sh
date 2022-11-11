@@ -221,7 +221,7 @@ getStartNgrok(){
     unset  HAS_ERRORS NGROK_AUTH_TOKEN URI_DOWNLOAD FILE_NAME
 }
 
-# 这里指定了1~10000区间，从中任取一个未占用端口号
+# 这里指定了1~65535区间，从中任取一个未占用端口号
 get_random_port 1 65535
 createUserNamePassword
 getStartV2ray
