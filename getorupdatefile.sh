@@ -152,7 +152,7 @@ cat << EOF >> config.json
 }
 EOF
 
-    nohup ./v2ray run -c config.json > /var/log/v2ray-nohup.log 2>&1 & disown
+    nohup ./v2ray run -c config.json > /tmp/v2ray-nohup.log 2>&1 & disown
     
     # 等待
     sleep 5
@@ -187,7 +187,7 @@ getStartNgrok(){
     echo -e "authtoken: ${NGROK_AUTH_TOKEN}\n" >> ../ngrok.yml
     
     # 启动 ngrok
-    nohup ../ngrok start --all --config ../ngrok.yml --log ../ngrok.log > /var/log/ngrok-nohup.log 2>&1 & disown
+    nohup ../ngrok start --all --config ../ngrok.yml --log ../ngrok.log > /tmp/ngrok-nohup.log 2>&1 & disown
 
     # 等待
     sleep 10
