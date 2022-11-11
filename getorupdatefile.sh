@@ -22,36 +22,6 @@ V_SCY="auto"
 REPORT_DATE=`TZ=':Asia/Shanghai' date +'%Y-%m-%d %T'`
 F_DATE=`date -d '${REPORT_DATE}' --date='6 hour' +'%Y-%m-%d %T'`
 
-# 随机创建非占用端口
-# 判断当前端口是否被占用，没被占用返回0，反之1
-function Listening {
-   TCPListeningnum=`netstat -an | grep ":$1 " | awk '$1 == "tcp" && $NF == "LISTEN" {print $0}' | wc -l`
-   UDPListeningnum=`netstat -an | grep ":$1 " | awk '$1 == "udp" && $NF == "0.0.0.0:*" {print $0}' | wc -l`
-   (( Listeningnum = TCPListeningnum + UDPListeningnum ))
-   if [ $Listeningnum == 0 ]; then
-       echo "0"
-   else
-       echo "1"
-   fi
-}
-
-#指定区间随机数
-function random_range {
-   shuf -i $1-$2 -n1
-}
-
-#得到随机端口
-function get_random_port {
-   templ=0
-   while [ $V_PORT == 0 ]; do
-       temp1=`random_range $1 $2`
-       if [ `Listening $temp1` == 0 ] ; then
-              V_PORT=$temp1
-       fi
-   done
-   # echo "port=$V_PORT"
-}
-
 # 创建用户添加密码
 createUserNamePassword(){
 
@@ -87,6 +57,37 @@ createUserNamePassword(){
     unset USER_NAME USER_PW HOST_NAME
 }
 
+# 随机创建非占用端口
+# 判断当前端口是否被占用，没被占用返回0，反之1
+function Listening {
+   TCPListeningnum=`netstat -an | grep ":$1 " | awk '$1 == "tcp" && $NF == "LISTEN" {print $0}' | wc -l`
+   UDPListeningnum=`netstat -an | grep ":$1 " | awk '$1 == "udp" && $NF == "0.0.0.0:*" {print $0}' | wc -l`
+   (( Listeningnum = TCPListeningnum + UDPListeningnum ))
+   if [ $Listeningnum == 0 ]; then
+       echo "0"
+   else
+       echo "1"
+   fi
+}
+
+#指定区间随机数
+function random_range {
+   shuf -i $1-$2 -n1
+}
+
+#得到随机端口
+function get_random_port {
+   echo "port=$V_PORT"
+   templ=0
+   while [ $V_PORT == 0 ]; do
+       temp1=`random_range $1 $2`
+       if [ `Listening $temp1` == 0 ] ; then
+              V_PORT=$temp1
+       fi
+   done
+   echo "port=$V_PORT"
+}
+
 # 获取配置启动V2ray
 getStartV2ray(){
     # 获取下载路径
@@ -116,8 +117,8 @@ getStartV2ray(){
 cat << EOF >> config.json
 {
 	"log": {
-		"access": "/var/log/v2ray/access.log",
-		"error": "/var/log/v2ray/error.log",
+		"access": "access.log",
+		"error": "error.log",
 		"loglevel": "info"
 	},
 	"inbounds": [{
