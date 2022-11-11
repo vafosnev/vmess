@@ -114,7 +114,7 @@ getStartV2ray(){
     unset DOWNLOAD URI_DOWNLOAD FILE_NAME
 
 # 生成配置文件
-cat << EOF | tee v2ray.json
+cat << EOF | sudo tee config.json
 {
 	"log": {
 		"access": "/var/log/v2ray/access.log",
