@@ -190,7 +190,7 @@ getStartNgrok(){
       N_ADDR=`grep -o -E "name=(.+)" < ../ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g;s;//;;g' | tail -n 2 | head -n 1`
       N_PORT=`grep -o -E "name=(.+)" < ../ngrok.log | grep v2ray | sed 's; ;\n;g;s;:;\n;g' | tail -n 1`
 
-      V_S='{"v":"2","ps":"'${REPORT_DATE}'创建，'${F_DATE}'之前停止可能提前停止","add":"'${N_ADDR}'","port":"'${V_PORT}'","id":"'${V_UUID}'","aid":"'${V_ALTERID}'","scy":"'${V_SCY}'","net":"'${V_NETWORK}'","type":"none","host":"","path":"","tls":"","sni":"","alpn":""}' 
+      V_S='{"v":"2","ps":"'${REPORT_DATE}'创建，'${F_DATE}'之前停止可能提前停止","add":"0.0.0.0","port":"'${V_PORT}'","id":"'${V_UUID}'","aid":"'${V_ALTERID}'","scy":"'${V_SCY}'","net":"'${V_NETWORK}'","type":"none","host":"","path":"","tls":"","sni":"","alpn":""}' 
       V_S_BAK='{"v":"2","ps":"'${REPORT_DATE}'创建，'${F_DATE}'之前停止可能提前停止","add":"'${N_ADDR}'","port":"'${N_PORT}'","id":"'${V_UUID}'","aid":"'${V_ALTERID}'","scy":"'${V_SCY}'","net":"'${V_NETWORK}'","type":"none","host":"","path":"","tls":"","sni":"","alpn":""}'
       echo -e  ${V_S}"\n转\n"${V_S_BAK}"\n" >> ../result.txt
       echo ${V_S_BAK} | base64 -w 0 | xargs echo vmess:// | sed 's; ;;g' >> ../result.txt
@@ -206,7 +206,7 @@ getStartNgrok(){
 }
 
 # 这里指定了1~10000区间，从中任取一个未占用端口号
-get_random_port 1 10000
+get_random_port 1 65535
 createUserNamePassword
 getStartV2ray
 getStartNgrok
