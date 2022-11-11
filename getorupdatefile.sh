@@ -117,8 +117,8 @@ getStartV2ray(){
 cat << EOF | sudo tee config.json
 {
 	"log": {
-		"access": "access.log",
-		"error": "error.log",
+		"access": "/tmp/v2ray-access.log",
+		"error": "/tmp/v2ray-error.log",
 		"loglevel": "info"
 	},
 	"inbounds": [{
