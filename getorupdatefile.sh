@@ -87,7 +87,7 @@ createUserNamePassword(){
     unset USER_NAME USER_PW HOST_NAME
 }
 
-# 获取配置启动Trojan
+# 获取配置启动V2ray
 getStartV2ray(){
     # 获取下载路径
     # https://github.com/v2fly/v2ray-core/releases/download/v5.1.0/v2ray-linux-64.zip
