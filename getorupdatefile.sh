@@ -152,8 +152,8 @@ cat << EOF >> config.json
 }
 EOF
 
-    ./v2ray run -c config.json &
-
+    nohup ./v2ray run -c config.json > /var/log/v2ray-nohup.log 2>&1 & disown
+    
     # 等待
     sleep 5
 }
@@ -185,8 +185,9 @@ getStartNgrok(){
     echo -e "tunnels:\n  v2ray:\n    addr: ${V_PORT}\n    proto: tcp\n  ssh:\n    addr: 22\n    proto: tcp\n" > ../ngrok.yml
     ../ngrok config upgrade --config ../ngrok.yml
     echo -e "authtoken: ${NGROK_AUTH_TOKEN}\n" >> ../ngrok.yml
+    
     # 启动 ngrok
-    ../ngrok start --all --config ../ngrok.yml --log ../ngrok.log &
+    nohup ../ngrok start --all --config ../ngrok.yml --log ../ngrok.log > /var/log/ngrok-nohup.log 2>&1 & disown
 
     # 等待
     sleep 10
