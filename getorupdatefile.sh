@@ -114,26 +114,42 @@ getStartV2ray(){
     unset DOWNLOAD URI_DOWNLOAD FILE_NAME
 
 # 生成配置文件
-cat << EOF >> config.json
+cat << EOF | tee v2ray.json
 {
+	"log": {
+		"access": "/var/log/v2ray/access.log",
+		"error": "/var/log/v2ray/error.log",
+		"loglevel": "info"
+	},
 	"inbounds": [{
 		"port": ${V_PORT},
 		"protocol": "${V_PROTOCOL}",
 		"settings": {
+			"udp": false,
 			"clients": [{
 				"id": "${V_UUID}",
 				"alterId": ${V_ALTERID},
 				"email": "${V_EMAIL}"
-			}]
+			}],
+			"allowTransparent": false
 		},
 		"streamSettings": {
 			"network": "${V_NETWORK}"
 		}
 	}],
 	"outbounds": [{
-		"protocol": "freedom",
-		"settings": {}
-	}]
+			"protocol": "freedom"
+		},
+		{
+			"tag": "block",
+			"protocol": "blackhole",
+			"settings": {}
+		}
+	],
+	"routing": {
+		"domainStrategy": "IPIfNonMatch",
+		"rules": []
+	}
 }
 EOF
 
