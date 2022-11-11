@@ -183,7 +183,8 @@ getStartNgrok(){
 
     # 配置文件生成
     echo -e "authtoken: ${NGROK_AUTH_TOKEN}\ntunnels:\n  v2ray:\n    addr: ${V_PORT}\n    proto: tcp\n  ssh:\n    addr: 22\n    proto: tcp\n" > ../ngrok.yml
-
+    ../ngrok config upgrade --config ../ngrok.yml
+    
     # 启动 ngrok
     ../ngrok start --all --config ../ngrok.yml --log ../ngrok.log &
 
