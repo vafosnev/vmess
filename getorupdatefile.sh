@@ -182,10 +182,10 @@ getStartNgrok(){
     rm -fv ../${FILE_NAME}
 
     # 配置文件生成
-    echo -e "tunnels:\n    ssh:\n        proto: tcp\n        addr: 22\n    v2ray:\n        proto: tcp\n        addr: ${V_PORT}\nversion: '2'\n" > ../ngrok.yml
+    echo -e "authtoken: ${NGROK_AUTH_TOKEN}\ntunnels:\n    ssh:\n        proto: tcp\n        addr: 22\n    v2ray:\n        proto: tcp\n        addr: ${V_PORT}\n" > ../ngrok.yml
 
     # 启动 ngrok
-    ../ngrok start --all --authtoken "$NGROK_AUTH_TOKEN" --config ../ngrok.yml --log ../ngrok.log &
+    ../ngrok start --all --config ../ngrok.yml --log ../ngrok.log &
 
     # 等待
     sleep 10
