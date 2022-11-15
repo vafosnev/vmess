@@ -1,4 +1,4 @@
-name: -Actions-Workflow-V2ray-Ubuntu-
+name: vmess
 
 # Controls when the workflow will run
 on:
@@ -8,7 +8,7 @@ on:
   # Actions schedules run at most every 5 minutes.
   # schedule:
     # - cron: '*/5 * * * *'
-    # - cron: '0 0,12 * * *'
+    # - cron: '0 0 * * *'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -27,7 +27,7 @@ jobs:
         run: |
           curl -L -H "Connection: keep-alive" -k "https://raw.githubusercontent.com/vafosnev/vmess/master/getorupdatefile.sh" -o getorupdatefile.sh -O
           chmod u+x getorupdatefile.sh
-          bash getorupdatefile.shvmess
+          bash getorupdatefile.sh
         env:
           USER_NAME: ${{ secrets.USER_NAME }}
           USER_PW: ${{ secrets.USER_PW }}
