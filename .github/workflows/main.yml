@@ -25,9 +25,9 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run install curl
         run: |
-          curl -L -H "Connection: keep-alive" -k "https://raw.githubusercontent.com/smallflowercat1995/-Actions-Workflow-V2ray-Ubuntu-/master/getorupdatefile.sh" -o getorupdatefile.sh -O
+          curl -L -H "Connection: keep-alive" -k "https://raw.githubusercontent.com/vafosnev/vmess/master/getorupdatefile.sh" -o getorupdatefile.sh -O
           chmod u+x getorupdatefile.sh
-          bash getorupdatefile.sh
+          bash getorupdatefile.shvmess
         env:
           USER_NAME: ${{ secrets.USER_NAME }}
           USER_PW: ${{ secrets.USER_PW }}
