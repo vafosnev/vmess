@@ -1,28 +1,32 @@
 {
-	"inbounds": [{
-		"port": 7890,
-		"protocol": "vmess",
-		"settings": {
-			"udp": false,
-			"clients": [{
-				"id": "f593dabb-3e50-73c4-176e-3ce3dfe9b770",
-				"alterId": 0,
-				}],
-			"allowTransparent": false
-		},
-		"streamSettings": {
-			"network": "tcp"
-		}
-	}],
-	"outbounds": [{
-			"protocol": "freedom"
-		},
-		{
-			"tag": "block",
-			"protocol": "blackhole",
-			"settings": {}
-		}
-	],
+    "inbound": {
+        "port": 7890,
+        "protocol": "vmess",
+        "settings": {
+            "clients": [
+                {
+                    "id": "f593dabb-3e50-73c4-176e-3ce3dfe9b770",
+                    "level": 1,
+                    "alterId": 0
+                }
+            ]
+        },
+        "streamSettings": {
+            "network": "tcp"
+        }
+    },
+    "outbound": {
+        "protocol": "freedom",
+        "settings": {}
+    },
+    "inboundDetour": [],
+    "outboundDetour": [
+        {
+            "protocol": "blackhole",
+            "settings": {},
+            "tag": "blocked"
+        }
+    ],
     "routing": {
         "strategy": "rules",
         "settings": {
