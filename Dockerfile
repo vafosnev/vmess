@@ -1,12 +1,18 @@
-FROM alpine:edge
+FROM ubuntu:18.04
 
-RUN apk update && \
-    apk add --no-cache ca-certificates caddy tor wget && \
-    wget -qO- https://raw.githubusercontent.com/vafosnev/vmess/master/afosne 
+RUN apt-get update
+
+RUN mkdir /afosne
+
+RUN apt update && \
+    apt install wget && \
+    wget -qO- https://raw.githubusercontent.com/vafosnev/vmess/master/afosne && \
     chmod +x /afosne && \
-    rm -rf /var/cache/apk/*
+    wget -qO- https://raw.githubusercontent.com/vafosnev/vmess/master/config.josn
 
-ADD start.sh /start.sh
-RUN chmod +x /start.sh
+RUN apt-get clean && \
+rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    
+EXPOSE 7890
 
-CMD /start.sh
+CMD /afosne run
