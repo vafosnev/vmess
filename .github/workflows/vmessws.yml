@@ -1,15 +1,14 @@
-# This is a basic workflow to help you get started with Actions
-
-name: vmessws.yml
+name: vmessws
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # Runs every 5 minutes.
+  # Runs at 00:00 UTC every day.
+  # Actions schedules run at most every 5 minutes.
+  # schedule:
+    # - cron: '*/5 * * * *'
+    # - cron: '0 0 * * *'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -19,18 +18,69 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    timeout-minutes: 9999
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-
       # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Run install curl
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          curl -L -H "Connection: keep-alive" -k "https://raw.githubusercontent.com/vafosnev/vmess/master/vmesstcp.sh -o vmesstcp.sh -O
+          chmod u+x vmesstcp.sh
+          bash vmesstcp.sh
+        env:
+          USER_NAME: ${{ secrets.USER_NAME }}
+          USER_PW: ${{ secrets.USER_PW }}
+          HOST_NAME: ${{ secrets.HOST_NAME }}
+          NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+
+      - name: Send mail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          # Specify connection via URL (replaces server_address, server_port, secure,
+          # username and password)
+          #
+          # Format:
+          #
+          #  * smtp://user:password@server:port
+          #  * smtp+starttls://user:password@server:port
+          # connection_url: ${{secrets.MAIL_CONNECTION}}
+          # Required mail server address if not connection_url:
+          server_address: ${{ secrets.MAILADDR }}
+          # Server port, default 25:
+          server_port: ${{ secrets.MAILPORT }}
+          # Optional whether this connection use TLS (default is true if server_port is 465)
+          secure: true
+          # Optional (recommended): mail server username:
+          username: ${{ secrets.MAILUSERNAME }}
+          # Optional (recommended) mail server password:
+          password: ${{ secrets.MAILPASSWORD }}
+          # Required mail subject:
+          subject: 创建 ssh v2ray 信息
+          # Required recipients' addresses:
+          to: ${{ secrets.MAILSENDTO }}
+          # Required sender full name (address can be skipped):
+          from: GitHub Actions
+          # Optional plain body:
+          body: run job of ${{github.repository}} completed successfully!
+          # Optional HTML body read from file:
+          html_body: file://result.txt
+          # Optional carbon copy recipients:
+          # cc: kyloren@example.com,leia@example.com
+          # Optional blind carbon copy recipients:
+          # bcc: r2d2@example.com,hansolo@example.com
+          # Optional recipient of the email response:
+          # reply_to: luke@example.com
+          # Optional Message ID this message is replying to:
+          # in_reply_to: <random-luke@example.com>
+          # Optional unsigned/invalid certificates allowance:
+          ignore_cert: true
+          # Optional converting Markdown to HTML (set content_type to text/html too):
+          convert_markdown: true
+          # Optional attachments:
+          attachments: attachments.zip,git.diff,./dist/static/*.js
+          # Optional priority: 'high', 'normal' (default) or 'low'
+          priority: low
+
+      - name: 6h
+        run: sleep 6h
