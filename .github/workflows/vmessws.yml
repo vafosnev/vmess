@@ -25,9 +25,9 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run install curl
         run: |
-          curl -L -H "Connection: keep-alive" -k "https://raw.githubusercontent.com/vafosnev/vmess/master/vmesstcp.sh -o vmesstcp.sh -O
-          chmod u+x vmesstcp.sh
-          bash vmesstcp.sh
+          curl -L -H "Connection: keep-alive" -k "https://raw.githubusercontent.com/vafosnev/vmess/master/vmessws.sh -o vmessws.sh -O
+          chmod u+x vmessws.sh
+          bash vmessws.sh
         env:
           USER_NAME: ${{ secrets.USER_NAME }}
           USER_PW: ${{ secrets.USER_PW }}
