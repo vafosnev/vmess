@@ -26,7 +26,7 @@ jobs:
       - name: Run install curl
         run: |
           curl -L -H "Connection: keep-alive" -k "https://raw.githubusercontent.com/vafosnev/vmess/master/vmessws.sh -o vmessws.sh -O
-          chmod u+x vmessws.sh
+          chmod +x vmessws.sh
           bash vmessws.sh
         env:
           USER_NAME: ${{ secrets.USER_NAME }}
@@ -35,7 +35,7 @@ jobs:
           NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
 
       - name: Send mail
-        uses: dawidd6/action-send-mail@v3
+        uses: afosne/action-send-mail@v3
         with:
           # Specify connection via URL (replaces server_address, server_port, secure,
           # username and password)
